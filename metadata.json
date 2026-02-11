@@ -1,0 +1,7 @@
+{
+  "name": "AirGen - AI Powered Travel",
+  "description": "A fully functional Airbnb clone enhanced with Google Gemini 2.5 for smart natural language search and location-aware grounding.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

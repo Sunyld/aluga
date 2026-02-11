@@ -1,0 +1,13 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/_not-found/page.js")
+R.c("server/chunks/ssr/Reactjs_Airbnb_Aluga+_41a6fef4._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__a44a947c._.js")
+R.c("server/chunks/ssr/1c0dd_next_dist_esm_build_templates_app-page_b6ac6402.js")
+R.c("server/chunks/ssr/[root-of-the-server]__d0360e87._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__f84f8558._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__f05596d1._.js")
+R.c("server/chunks/ssr/Reactjs_Airbnb_Aluga+_app_layout_tsx_cafe2a23._.js")
+R.c("server/chunks/ssr/1c0dd_next_dist_client_components_fbf76111._.js")
+R.c("server/chunks/ssr/1c0dd_next_dist_client_components_builtin_forbidden_d46b8467.js")
+R.c("server/chunks/ssr/Reactjs_Airbnb_Aluga+__next-internal_server_app__not-found_page_actions_d7bb6d1c.js")
+R.m(7785)
+module.exports=R.m(7785).exports
