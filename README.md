@@ -1,82 +1,88 @@
 # Aluga+
 
-Plataforma web inspirada no Airbnb para anúncios de imóveis, logística e espaços de eventos, com foco em Moçambique. O projeto usa Next.js (App Router) e Tailwind CSS, com componentes reutilizáveis e dados de exemplo carregados localmente.
+Plataforma web para anunciar e encontrar **imóveis**, **serviços de logística** e **espaços para eventos** em Moçambique, com interface inspirada no Airbnb.
 
-## Funcionalidades
-- Catálogo com categorias e navegação por filtros.
-- Pesquisa simples por localização.
-- Filtros de preço e categoria.
-- Favoritos persistidos em `localStorage`.
-- Página de detalhe do produto em `/produto/[id]` com galeria e mapa (OpenStreetMap).
-- Componentes UI com Radix e ícones Lucide.
+---
 
-## Stack
-- Next.js (App Router), React 18, TypeScript.
-- Tailwind CSS v4.
-- Radix UI, Lucide, Embla Carousel, Vaul.
+## 1. Stack principal
 
-## Estrutura do Projeto
-- `app/page.tsx`: entrada da home (renderiza `App.tsx`).
-- `app/produto/[id]/page.tsx`: página de detalhe do anúncio.
-- `App.tsx`: layout principal e regras de filtro/pesquisa.
-- `constants.tsx`: dados de exemplo (categorias + listagens).
-- `types.ts`: tipos compartilhados do domínio.
-- `components/`: UI e módulos de página.
-- `components/product/`: galeria, mapa e favoritos do detalhe.
-- `app/globals.css`: tokens de design e utilitários.
+- **Framework**: Next.js 16 (App Router)
+- **Linguagem**: React 18 + TypeScript
+- **Estilos**: Tailwind CSS 4
+- **UI**: Radix UI, componentes próprios em `components/ui`, ícones Lucide
 
-## Dados e Localização
-Os dados de exemplo estão em `constants.tsx`. Ajuste títulos, localizações, preços (MZN) e categorias para refletir o contexto moçambicano.
+---
 
-## Como Executar
-1. Instale as dependências:
+## 2. Estrutura base
+
+- `app/page.tsx` – ponto de entrada da home (renderiza `App.tsx`)
+- `App.tsx` – layout principal, lógica de categorias, filtros e wishlist
+- `constants.tsx` – dados de exemplo (`LISTINGS`) já organizados por domínio:
+  - `imoveis`
+  - `logistica`
+  - `eventos`
+- `types.ts` – tipos de domínio (`Listing`, `Category`, `Filters`, etc.)
+- `components/` – componentes de UI:
+  - `Navbar.tsx` – barra superior com pesquisa
+  - `CategoryBar.tsx` – tabs principais: Imóveis / Logística / Eventos
+  - `FilterModal.tsx` – filtros por categoria (tipo, finalidade, preço, localização)
+  - `ListingCard.tsx`, `ListingModal.tsx` – cards e detalhe dos anúncios
+  - `components/mobile/BottomNavbar.tsx` e `UserProfile.tsx` – experiência adaptada para mobile
+  - `components/product/*` – galeria de imagens, mapa, favoritos, etc.
+- `services/geminiService.ts` – stub utilitário simples para interpretar texto de pesquisa em filtros (sem dependência externa real).
+
+---
+
+## 3. Funcionalidades atuais
+
+- **Categorias principais fixas**: Imóveis, Logística, Eventos
+- **Filtros por categoria**:
+  - Imóveis: finalidade (aluguer/venda), tipo (casa, apartamento, quarto, etc.), faixa de preço, localização
+  - Logística: tipo de serviço (camiões, carga, mudanças), preço opcional, localização
+  - Eventos: tipo de espaço (salões, quintas, workshops), preço, localização
+- **Pesquisa simples** pela barra superior:
+  - Usa um parser de texto para tentar extrair alguns filtros (preço, localização, categoria)
+- **Wishlist** (favoritos) persistida em `localStorage`
+- **Layout responsivo**: grid adaptativa e navegação própria para mobile (bottom navbar)
+
+---
+
+## 4. Como correr o projeto
+
+Na raiz do projeto (`Aluga+`):
+
+### 4.1. Instalar dependências
+
 ```bash
 npm install
 ```
-2. Rode em desenvolvimento:
+
+### 4.2. Ambiente de desenvolvimento
+
 ```bash
 npm run dev
 ```
-3. Build de produção:
+
+O Next arrancará por defeito em `http://localhost:3000`.
+
+### 4.3. Lint
+
 ```bash
-npm run build
-```
-4. Rodar a build:
-```bash
-npm run start
+npm run lint
 ```
 
-## Notas do Projeto
-Há arquivos legados de Vite (`vite.config.ts`, `index.html`, `index.tsx`) que não são usados pelo Next.js. Mantenha apenas se precisar deles por algum motivo específico.
+---
 
-## Como Fazer Commit e Enviar para o GitHub
-1. Verifique o estado do repositório:
-```bash
-git status
-```
-2. Adicione os arquivos:
-```bash
-git add .
-```
-3. Faça o commit:
-```bash
-git commit -m "Atualiza README"
-```
-4. Verifique o remoto atual:
-```bash
-git remote -v
-```
-5. Se ainda não existir remoto `origin`, adicione-o:
-```bash
-git remote add origin https://github.com/Sunyld/aluga.git
-```
-6. Se o remoto já existir e precisar ajustar:
-```bash
-git remote set-url origin https://github.com/Sunyld/aluga.git
-```
-7. Faça o push da branch atual:
-```bash
-git branch
-git push -u origin main
-```
-Se a sua branch principal se chamar `master`, substitua `main` por `master`.
+## 5. Notas de configuração
+
+- O ficheiro `next.config.mjs` está minimalista e preparado para o App Router.
+- A chave `GEMINI_API_KEY` em `.env.local` está como **placeholder** – substitui pelo teu valor real se integrares algum serviço externo. Como boa prática, o `.env.local` é ignorado no `.gitignore`.
+
+---
+
+## 6. Próximos passos sugeridos
+
+- Ligar a pesquisa e filtros a uma API real ou base de dados.
+- Definir um fluxo de autenticação/conta de utilizador.
+- Configurar um alvo de deploy (ex.: Vercel) e adicionar instruções de deploy aqui se necessário.
+
