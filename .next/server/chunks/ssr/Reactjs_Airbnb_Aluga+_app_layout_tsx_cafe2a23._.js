@@ -1,3 +1,0 @@
-module.exports=[65147,a=>{"use strict";var b=a.i(60880);function c({children:a}){return(0,b.jsx)("html",{lang:"pt",children:(0,b.jsx)("body",{className:"min-h-screen bg-neutral-50 text-neutral-900",children:a})})}a.s(["default",()=>c,"metadata",0,{title:"Aluga+ · Imóveis, Logística e Eventos em Moçambique",description:"Plataforma Aluga+ para aluguer e gestão de imóveis, logística e espaços de eventos em Moçambique."}])}];
-
-//# sourceMappingURL=Reactjs_Airbnb_Aluga%2B_app_layout_tsx_cafe2a23._.js.map

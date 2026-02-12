@@ -1,3 +1,0 @@
-module.exports=[5561,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(38518);a.n(d("[project]/Reactjs/Airbnb/Aluga+/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},79986,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(38518);a.n(d("[project]/Reactjs/Airbnb/Aluga+/node_modules/next/dist/client/components/builtin/global-error.js"))},94954,a=>{"use strict";a.i(5561);var b=a.i(79986);a.n(b)}];
-
-//# sourceMappingURL=1c0dd_next_dist_client_components_builtin_global-error_c3280c9e.js.map
