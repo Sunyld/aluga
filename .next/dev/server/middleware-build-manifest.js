@@ -4,20 +4,20 @@ globalThis.__BUILD_MANIFEST = {
   },
   "devFiles": [],
   "polyfillFiles": [
-    "static/chunks/1c0dd_next_dist_build_polyfills_polyfill-nomodule.js"
+    "static/chunks/5e541_next_dist_build_polyfills_polyfill-nomodule.js"
   ],
   "lowPriorityFiles": [],
   "rootMainFiles": [
-    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_203d3ff4._.js",
-    "static/chunks/1c0dd_next_dist_compiled_react-dom_9b2cea0f._.js",
-    "static/chunks/1c0dd_next_dist_compiled_react-server-dom-turbopack_b8c3bba8._.js",
-    "static/chunks/1c0dd_next_dist_compiled_next-devtools_index_34f7a135.js",
-    "static/chunks/1c0dd_next_dist_compiled_1cbe2c9e._.js",
-    "static/chunks/1c0dd_next_dist_client_61ba6a81._.js",
-    "static/chunks/1c0dd_next_dist_70c96592._.js",
-    "static/chunks/1c0dd_@swc_helpers_cjs_dac7f27b._.js",
-    "static/chunks/Reactjs_Airbnb_Aluga+_a0ff3932._.js",
-    "static/chunks/turbopack-Reactjs_Airbnb_Aluga+_4eb7a444._.js"
+    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_7c143b8b._.js",
+    "static/chunks/5e541_next_dist_compiled_react-dom_3de2f637._.js",
+    "static/chunks/5e541_next_dist_compiled_react-server-dom-turbopack_6d933c29._.js",
+    "static/chunks/5e541_next_dist_compiled_next-devtools_index_25695441.js",
+    "static/chunks/5e541_next_dist_compiled_909218dc._.js",
+    "static/chunks/5e541_next_dist_client_1bbf7e62._.js",
+    "static/chunks/5e541_next_dist_ee5db656._.js",
+    "static/chunks/5e541_@swc_helpers_cjs_e0affcfc._.js",
+    "static/chunks/Reactjs_Airbnb_Aluga_a0ff3932._.js",
+    "static/chunks/turbopack-Reactjs_Airbnb_Aluga_216c7603._.js"
   ]
 };
 globalThis.__BUILD_MANIFEST.lowPriorityFiles = [
