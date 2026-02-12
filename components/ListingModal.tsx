@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Star, Heart, Share, Grid, MapPin, Send, Bot } from 'lucide-react';
 import { Listing } from '../types';
@@ -110,14 +112,17 @@ const ListingModal: React.FC<ListingModalProps> = ({ listing, onClose }) => {
          <div className="p-6 border-b bg-white shadow-sm z-10">
            <div className="flex justify-between items-end">
              <div>
-               <span className="text-2xl font-bold text-muted">
-                 {new Intl.NumberFormat("pt-MZ", {
-                   style: "currency",
-                   currency: "MZN",
-                   maximumFractionDigits: 0,
-                 }).format(listing.price)}
+               <span className="text-2xl font-bold text-[#FF585D]">
+{new Intl.NumberFormat("pt-MZ", {
+                  style: "decimal",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(listing.price)}{" "}
+                MZN
                </span>
-               <span className="text-muted opacity-80"> / dia</span>
+               <span className="text-[#484848]/70">
+                {listing.finalidade === "aluguer" ? " /mês" : ""}
+              </span>
              </div>
              <div className="flex gap-1 text-xs font-semibold text-muted opacity-80 underline">
                2 avaliações

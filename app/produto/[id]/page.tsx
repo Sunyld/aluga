@@ -57,8 +57,19 @@ export default function ProdutoPage() {
           <h1 className="text-xl font-semibold text-[#484848] md:text-2xl">
             {listing.title}
           </h1>
-          <p className="mt-1 text-sm text-[#484848]">
+          <p className="mt-1 text-sm text-[#484848]/80">
             {listing.location}
+          </p>
+          <p className="mt-2 text-lg font-semibold text-[#FF585D]">
+            {new Intl.NumberFormat("pt-MZ", {
+              style: "decimal",
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).format(listing.price)}{" "}
+            MZN
+            {listing.finalidade === "aluguer" && (
+              <span className="text-base font-medium text-[#484848]/70"> /mês</span>
+            )}
           </p>
         </div>
         <div className="hidden md:block">

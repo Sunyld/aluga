@@ -36,18 +36,28 @@ export interface Listing {
  * Mantém compatibilidade com os campos antigos (minPrice/maxPrice).
  */
 export interface Filters {
-  category: Category;
+  category: Category | "all";
+  types?: string[];
+  finalidades?: ("aluguer" | "venda")[];
   type?: string;
   finalidade?: "aluguer" | "venda";
   priceRange?: {
     min?: number;
     max?: number;
   };
-  location?: string;
-  // Campos legados ainda usados em algumas partes da app
   minPrice?: number;
   maxPrice?: number;
 }
 
 // Alias para manter compatibilidade com componentes existentes
 export type SearchFilters = Filters;
+
+/** Dados do utilizador para a página de perfil */
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  avatar?: string;
+  memberSince?: string;
+}

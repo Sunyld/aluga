@@ -29,7 +29,7 @@ export function ListingStoryCard({
   return (
     <article className="flex min-h-[calc(100vh-4.5rem)] flex-col justify-between pb-20 pt-3">
       <div className="space-y-3">
-        <div className="relative h-[340px] w-full overflow-hidden rounded-3xl bg-neutral-200">
+        <div className="relative h-[340px] w-full overflow-hidden rounded-3xl bg-[#484848]/10">
           <Carousel
             className="h-full w-full"
           >
@@ -67,7 +67,7 @@ export function ListingStoryCard({
               className={cn(
                 "h-5 w-5 transition",
                 isWishlisted
-                  ? "fill-red-500 text-red-500"
+                  ? "fill-[#FF585D] text-[#FF585D]"
                   : "fill-transparent text-white"
               )}
             />
@@ -84,13 +84,13 @@ export function ListingStoryCard({
         </div>
 
         <div className="space-y-1 px-1">
-          <h2 className="text-base font-semibold text-neutral-900">
+          <h2 className="text-base font-semibold text-[#484848]">
             {data.title}
           </h2>
-          <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+          <p className="text-xs font-medium uppercase tracking-wide text-[#484848]/70">
             {data.location}
           </p>
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-[#484848]/60 line-clamp-2">
             {data.description.length > 120
               ? data.description.slice(0, 120) + "..."
               : data.description}
@@ -100,24 +100,24 @@ export function ListingStoryCard({
 
       <div className="mt-4 flex items-center justify-between px-1 text-sm">
         <div className="space-y-0.5">
-          <p className="font-semibold text-neutral-900">
+          <p className="font-semibold text-[#FF585D]">
             {new Intl.NumberFormat("pt-MZ", {
-              style: "currency",
-              currency: "MZN",
+              style: "decimal",
+              minimumFractionDigits: 0,
               maximumFractionDigits: 0,
-            }).format(data.price)}
-            <span className="text-xs font-normal text-neutral-500">
-              {" "}
-              / dia
-            </span>
+            }).format(data.price)}{" "}
+            MZN
+            {data.finalidade === "aluguer" && (
+              <span className="text-xs font-normal text-[#484848]/70"> /mês</span>
+            )}
           </p>
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-[#484848]/60">
             {data.distance} · {data.dates}
           </p>
         </div>
-        <p className="text-xs text-neutral-500">
+        <p className="text-xs text-[#484848]/60">
           Anunciado por{" "}
-          <span className="font-medium text-neutral-800">
+          <span className="font-medium text-[#484848]">
             {data.host.name}
           </span>
         </p>

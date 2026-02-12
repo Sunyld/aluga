@@ -1,10 +1,17 @@
 "use client";
 
-import { Home, SlidersHorizontal, User2 } from "lucide-react";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Home, SlidersHorizontal, User } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 type TabId = "home" | "filter" | "profile";
+
+const ITEMS: { id: TabId; icon: React.ElementType; label: string }[] = [
+  { id: "home", icon: Home, label: "Home" },
+  { id: "filter", icon: SlidersHorizontal, label: "Filtro" },
+  { id: "profile", icon: User, label: "Perfil" },
+];
 
 interface BottomNavbarProps {
   active: TabId;
@@ -13,44 +20,69 @@ interface BottomNavbarProps {
 }
 
 export function BottomNavbar({ active, onChange, hidden }: BottomNavbarProps) {
+  const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const activeIndex = ITEMS.findIndex((item) => item.id === active);
+
+  useEffect(() => {
+    const updateIndicator = () => {
+      const btn = btnRefs.current[activeIndex];
+      const container = containerRef.current;
+      if (btn && container) {
+        const btnRect = btn.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        setIndicatorStyle({
+          width: btnRect.width,
+          left: btnRect.left - containerRect.left,
+        });
+      }
+    };
+
+    updateIndicator();
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
+  }, [activeIndex]);
+
   if (hidden) return null;
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-neutral-200 bg-white/95 px-6 pb-5 pt-2 shadow-[0_-6px_18px_rgba(15,23,42,0.05)] md:hidden">
-      <div className="mx-auto flex max-w-md items-center justify-center text-xs font-medium">
-        <ToggleGroup
-          type="single"
-          value={active}
-          onValueChange={(val) => val && onChange(val as TabId)}
-          className="w-full justify-between"
-        >
-          <NavItem value="home" icon={Home} label="Home" />
-          <NavItem value="filter" icon={SlidersHorizontal} label="Filtro" />
-          <NavItem value="profile" icon={User2} label="Perfil" />
-        </ToggleGroup>
-      </div>
-    </nav>
-  );
-}
-
-interface NavItemProps {
-  value: TabId;
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-}
-
-function NavItem({ value, icon: Icon, label }: NavItemProps) {
-  return (
-    <ToggleGroupItem value={value} className="flex flex-1 flex-col items-center gap-1">
-      <span
-        className={cn(
-          "flex h-9 w-9 items-center justify-center rounded-full border text-sm data-[state=on]:border-neutral-900 data-[state=on]:bg-neutral-900 data-[state=on]:text-white",
-          "border-transparent bg-neutral-100 text-neutral-500"
-        )}
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg px-4 md:hidden">
+      <div
+        ref={containerRef}
+        className="relative flex items-center justify-between bg-white shadow-xl rounded-full px-1 py-2 border border-[#484848]/10"
       >
-        <Icon className="h-4 w-4" />
-      </span>
-      <span className="data-[state=on]:text-neutral-900">{label}</span>
-    </ToggleGroupItem>
+        {ITEMS.map((item, index) => {
+          const Icon = item.icon;
+          const isActive = item.id === active;
+          return (
+            <button
+              key={item.id}
+              ref={(el) => {
+                btnRefs.current[index] = el;
+              }}
+              type="button"
+              onClick={() => onChange(item.id)}
+              className={cn(
+                "relative flex flex-col items-center justify-center flex-1 px-3 py-2 text-sm font-medium z-10",
+                isActive ? "text-[#FF585D]" : "text-[#484848] opacity-60"
+              )}
+              aria-current={isActive ? "page" : undefined}
+              aria-label={item.label}
+            >
+              <Icon className="h-5 w-5" />
+              <span className="text-xs mt-0.5">{item.label}</span>
+            </button>
+          );
+        })}
+
+        <motion.div
+          animate={indicatorStyle}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          className="absolute top-2 bottom-2 rounded-full bg-[#FF585D]/10 -z-0"
+        />
+      </div>
+    </div>
   );
 }
