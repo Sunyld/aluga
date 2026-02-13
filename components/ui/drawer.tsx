@@ -2,8 +2,7 @@ import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "../../lib/utils";
 
-interface DrawerProps
-  extends React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Root> {}
+type DrawerProps = React.ComponentProps<typeof DrawerPrimitive.Root>;
 
 const Drawer = ({ shouldScaleBackground = true, ...props }: DrawerProps) => (
   <DrawerPrimitive.Root

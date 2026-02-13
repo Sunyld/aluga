@@ -1,6 +1,6 @@
 import * as React from "react";
 import useEmblaCarousel, {
-  type EmblaCarouselType,
+  type UseEmblaCarouselType,
 } from "embla-carousel-react";
 import { cn } from "../../lib/utils";
 
@@ -10,7 +10,7 @@ interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: CarouselOrientation;
 }
 
-type CarouselApi = EmblaCarouselType | undefined;
+type CarouselApi = UseEmblaCarouselType[1];
 
 const CarouselContext = React.createContext<{
   api: CarouselApi;

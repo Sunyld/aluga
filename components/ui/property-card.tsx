@@ -10,7 +10,7 @@ const cardVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: "easeInOut" },
+    transition: { duration: 0.4, ease: "easeInOut" as const },
   },
 };
 
@@ -19,7 +19,7 @@ const textVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.3, ease: "easeOut" },
+    transition: { duration: 0.3, ease: "easeOut" as const },
   },
 };
 
@@ -69,18 +69,14 @@ const PropertyCard = React.forwardRef<HTMLDivElement, PropertyCardProps>(
     }).format(price);
 
     return (
-      <motion.div
-        ref={ref}
-        className={cn(
-          "group w-full max-w-sm overflow-hidden rounded-xl border border-[#484848]/10 bg-white text-[#484848] shadow-sm transition-all duration-300 ease-in-out hover:shadow-lg",
-          className
-        )}
-        variants={cardVariants}
-        initial="hidden"
-        animate="visible"
-        whileHover={{ scale: 1.03, y: -5 }}
-        {...props}
-      >
+      <div ref={ref} {...props} className={cn("w-full max-w-sm", className)}>
+        <motion.div
+          className="group h-full overflow-hidden rounded-xl border border-[#484848]/10 bg-white text-[#484848] shadow-sm transition-all duration-300 ease-in-out hover:shadow-lg"
+          variants={cardVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover={{ scale: 1.03, y: -5 }}
+        >
         {/* Image Section */}
         <div className="relative overflow-hidden">
           <img
@@ -162,7 +158,8 @@ const PropertyCard = React.forwardRef<HTMLDivElement, PropertyCardProps>(
             </motion.div>
           </div>
         </div>
-      </motion.div>
+        </motion.div>
+      </div>
     );
   }
 );

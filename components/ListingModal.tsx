@@ -2,17 +2,23 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Star, Heart, Share, Grid, MapPin, Send, Bot } from 'lucide-react';
-import { Listing } from '../types';
+import { Listing, MapLink } from '../types';
 
 // Stub local para evitar dependência de serviço externo (Gemini)
 // Mantém a UX do chat, mas com resposta fixa.
 const askAboutListingLocation = async (
   question: string,
   listing: Listing
-) => {
+): Promise<{ text: string; mapLinks: MapLink[] }> => {
   const text = `Informações automáticas sobre a vizinhança de "${listing.title}" não estão disponíveis neste ambiente. Consulte o mapa e a descrição do anúncio para mais detalhes.`;
-  return { text, mapLinks: [] as any[] };
+  return { text, mapLinks: [] };
 };
+
+interface ChatMessage {
+  role: 'user' | 'ai';
+  text: string;
+  links?: MapLink[];
+}
 
 interface ListingModalProps {
   listing: Listing;
@@ -21,7 +27,7 @@ interface ListingModalProps {
 
 const ListingModal: React.FC<ListingModalProps> = ({ listing, onClose }) => {
   const [question, setQuestion] = useState('');
-  const [chatHistory, setChatHistory] = useState<{role: 'user' | 'ai', text: string, links?: any[]}[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 

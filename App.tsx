@@ -90,6 +90,13 @@ const App: React.FC = () => {
       result = result.filter((l) => l.price <= priceMax);
     }
 
+    const loc = filters.location?.trim().toLowerCase();
+    if (loc) {
+      result = result.filter((l) =>
+        l.location.toLowerCase().includes(loc)
+      );
+    }
+
     setFilteredListings(result);
   }, [filters]);
 
