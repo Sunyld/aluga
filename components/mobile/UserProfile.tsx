@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   LogOut,
   Heart,
+  SquarePlus,
   Settings,
   HelpCircle,
   Package,
@@ -13,6 +14,8 @@ import {
   Calendar,
   MapPin,
   Star,
+  CheckCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { LISTINGS } from "../../constants";
@@ -120,6 +123,18 @@ export function UserProfile() {
             count={favorites.length}
             onClick={() => {}}
           />
+          <div className="mx-4 border-t border-[#484848]/5" />
+           <ProfileItem
+            icon={SquarePlus}
+            label="Publicar"
+            onClick={() => router.push(`/publicar`)}
+          />
+          <div className="mx-4 border-t border-[#484848]/5" />
+          <ProfileItem
+           icon={CheckCircle2}
+           label="Confirmar transação"
+           onClick={() => router.push(`/confirmar-transacao`)}
+         />
           <div className="mx-4 border-t border-[#484848]/5" />
           <ProfileItem icon={Settings} label="Configurações" onClick={() => {}} />
           <div className="mx-4 border-t border-[#484848]/5" />

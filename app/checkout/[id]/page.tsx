@@ -9,26 +9,18 @@ import type { Listing } from "../../../types";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
-import { LoaderOverlay } from "../../../components/ui/loader";
-import { useToast } from "../../../components/ui/toast";
 
-type Step = 1 | 2 | 3 | 4;
+type Step = 1 | 2 | 3;
 
 type PaymentStatus = "idle" | "success" | "error";
 
 export default function ConfirmPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const toast = useToast();
 
   const [step, setStep] = useState<Step>(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("idle");
-
-  const [customerName, setCustomerName] = useState("");
-  const [customerEmail, setCustomerEmail] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [customerDocument, setCustomerDocument] = useState("");
 
   const [paymentMethod, setPaymentMethod] = useState<"card" | "mpesa" | "transfer">("card");
   const [cardNumber, setCardNumber] = useState("");
@@ -36,8 +28,7 @@ export default function ConfirmPage() {
   const [cardCvv, setCardCvv] = useState("");
   const [paymentReference, setPaymentReference] = useState("");
 
-  const params = useParams<{ id: string }>();
-  const listingId = searchParams.get("listingId") || searchParams.get("id") || params?.id;
+  const listingId = searchParams.get("listingId") || searchParams.get("id");
   const totalParam = searchParams.get("total");
   const nightsParam = searchParams.get("nights");
   const guestsParam = searchParams.get("guests");
@@ -72,14 +63,7 @@ export default function ConfirmPage() {
       maximumFractionDigits: 0,
     }).format(listing.price);
 
-  const canGoToStep2 =
-    !!listing && baseTotal > 0;
-
-  const canGoToStep3 =
-    customerName.trim().length > 2 &&
-    customerEmail.includes("@") &&
-    customerPhone.trim().length >= 7 &&
-    customerDocument.trim().length >= 5;
+  const canGoToStep2 = !!listing && baseTotal > 0;
 
   const isPaymentFormValid =
     paymentMethod === "card"
@@ -90,19 +74,14 @@ export default function ConfirmPage() {
 
   const goNext = () => {
     if (step === 1 && canGoToStep2) setStep(2);
-    if (step === 2 && canGoToStep3) setStep(3);
   };
 
   const goBack = () => {
     if (step === 1) {
-      if (listingId) {
-        router.push(`/produto/${listingId}`);
-      } else {
-        router.back();
-      }
+      router.back();
       return;
     }
-    if (step > 1 && step < 4) {
+    if (step > 1 && step < 3) {
       setStep((prev) => (prev > 1 ? ((prev - 1) as Step) : prev));
       setPaymentStatus("idle");
     }
@@ -115,14 +94,12 @@ export default function ConfirmPage() {
 
     // Simulação de comunicação com gateway de pagamento
     setTimeout(() => {
-      const ok = Math.random() > 0.15; // ~85% de sucesso
-      if (ok) {
+      const success = Math.random() > 0.15; // ~85% de sucesso
+      if (success) {
         setPaymentStatus("success");
-        setStep(4);
-        toast.success("Pagamento confirmado com sucesso!");
+        setStep(3);
       } else {
         setPaymentStatus("error");
-        toast.error("Não foi possível concluir o pagamento. Tente novamente.");
       }
       setIsProcessing(false);
     }, 1500);
@@ -133,8 +110,7 @@ export default function ConfirmPage() {
   };
 
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-4 py-6 md:py-8 relative">
-      {isProcessing && <LoaderOverlay message="A processar pagamento..." />}
+    <main className="mx-auto min-h-screen max-w-5xl px-4 py-6 md:py-8">
       <header className="flex items-center justify-between mb-6">
         <button
           type="button"
@@ -150,8 +126,8 @@ export default function ConfirmPage() {
         <h1 className="text-2xl font-semibold text-[#484848] md:text-3xl">
           Confirmar reserva
         </h1>
-        <p className="mt-1 text-sm text-[#484848]">
-          Revise os detalhes do imóvel, preencha os seus dados e conclua o pagamento em poucos passos.
+        <p className="mt-1 text-lg text-[#484848]">
+          Revise os detalhes do imóvel e conclua o pagamento em poucos passos.
         </p>
       </section>
 
@@ -165,20 +141,14 @@ export default function ConfirmPage() {
           />
           <StepSeparator />
           <StepItem
-            label="Dados do cliente"
+            label="Pagamento"
             number={2}
             current={step}
           />
           <StepSeparator />
           <StepItem
-            label="Pagamento"
-            number={3}
-            current={step}
-          />
-          <StepSeparator />
-          <StepItem
             label="Confirmação"
-            number={4}
+            number={3}
             current={step}
           />
         </div>
@@ -197,16 +167,16 @@ export default function ConfirmPage() {
               </CardHeader>
               <CardContent className="space-y-4 text-sm text-[#484848]">
                 {!listing && (
-                  <p className="text-sm text-[#8a8a8a]">
+                  <p className="text-lg text-[#8a8a8a]">
                     Não encontramos o imóvel associado a esta confirmação. Volte e selecione novamente um anúncio.
                   </p>
                 )}
                 {listing && (
                   <>
-                    <div className="flex flex-col gap-2">
-                      <p className="text-sm font-semibold">{listing.title}</p>
-                      <p className="text-xs text-[#8a8a8a]">{listing.location}</p>
-                      <p className="text-xs text-[#8a8a8a]">
+                    <div className="flex flex-col gap-1">
+                      <p className="text-base font-semibold">{listing.title}</p>
+                      <p className="text-sm text-[#8a8a8a]">{listing.location}</p>
+                      <p className="text-sm text-[#8a8a8a]">
                         {listing.type === "apartamento"
                           ? "Apartamento"
                           : listing.type === "casa"
@@ -216,20 +186,20 @@ export default function ConfirmPage() {
                       </p>
                     </div>
 
-                    <div className="grid gap-3 rounded-2xl bg-neutral-50 p-3">
-                      <div className="flex items-center justify-between text-xs">
+                    <div className="grid gap-1 rounded-2xl bg-red-50 border border-red-200 p-3">
+                      <div className="flex items-center justify-between text-sm">
                         <span className="text-[#8a8a8a]">Preço base</span>
                         <span className="font-medium text-[#484848]">
                           {formattedPricePerNight} / dia
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center justify-between text-sm">
                         <span className="text-[#8a8a8a]">Duração estimada</span>
                         <span className="font-medium text-[#484848]">
                           {nights > 0 ? `${nights} noite(s)` : "A definir"}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between border-t border-dashed border-black/5 pt-3 text-xs">
+                      <div className="flex items-center justify-between border-t border-dashed border-black/5 pt-3 text-base">
                         <span className="font-semibold text-[#484848]">Total a pagar</span>
                         <span className="text-base font-semibold text-[#FF585D]">
                           {formattedTotal}
@@ -268,7 +238,6 @@ export default function ConfirmPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => router.back()}
-                    
                     className="rounded-lg "
                   >
                     Alterar seleção
@@ -288,87 +257,6 @@ export default function ConfirmPage() {
           )}
 
           {step === 2 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base text-[#484848]">
-                  <User className="h-4 w-4 text-[#FF585D]" />
-                  Dados do cliente
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-3 md:grid-cols-2">
-                  <div>
-                    <label className="mb-1 block text-xs font-medium text-[#484848]">
-                      Nome completo
-                    </label>
-                    <Input
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Ex: João Manuel"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-medium text-[#484848]">
-                      Email
-                    </label>
-                    <Input
-                      type="email"
-                      value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
-                      placeholder="seuemail@exemplo.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-medium text-[#484848]">
-                      Telefone
-                    </label>
-                    <Input
-                      value={customerPhone}
-                      onChange={(e) => setCustomerPhone(e.target.value)}
-                      placeholder="+258 ..."
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-medium text-[#484848]">
-                      Documento de identificação
-                    </label>
-                    <Input
-                      value={customerDocument}
-                      onChange={(e) => setCustomerDocument(e.target.value)}
-                      placeholder="BI / Passaporte / NUIT"
-                    />
-                  </div>
-                </div>
-
-                <p className="text-xs text-[#8a8a8a]">
-                  Os seus dados serão partilhados apenas com o anunciante para gestão da reserva,
-                  de acordo com as boas práticas de proteção de dados.
-                </p>
-
-                <div className="mt-4 flex justify-between gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={goBack}
-                  >
-                    Voltar
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    className="bg-[#FF585D] text-white hover:bg-[#ff6f72]"
-                    onClick={goNext}
-                    disabled={!canGoToStep3}
-                  >
-                    Ir para pagamento
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {step === 3 && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base text-[#484848]">
@@ -416,7 +304,7 @@ export default function ConfirmPage() {
                 {paymentMethod === "card" && (
                   <div className="grid gap-3">
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-[#484848]">
+                      <label className="mb-1 block  font-medium text-[#484848]">
                         Número do cartão
                       </label>
                       <Input
@@ -427,7 +315,7 @@ export default function ConfirmPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="mb-1 block text-xs font-medium text-[#484848]">
+                        <label className="mb-1 block  font-medium text-[#484848]">
                           Validade (MM/AA)
                         </label>
                         <Input
@@ -437,7 +325,7 @@ export default function ConfirmPage() {
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-xs font-medium text-[#484848]">
+                        <label className="mb-1 block  font-medium text-[#484848]">
                           CVV
                         </label>
                         <Input
@@ -475,7 +363,7 @@ export default function ConfirmPage() {
                 )}
 
                 {paymentStatus === "error" && (
-                  <div className="flex items-start gap-2 rounded-2xl bg-red-50 px-3 py-2 text-xs text-red-700">
+                  <div className="flex items-start gap-2 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
                     <AlertCircle className="mt-0.5 h-4 w-4" />
                     <p>
                       Não foi possível concluir o pagamento neste momento. Verifique os dados
@@ -484,25 +372,27 @@ export default function ConfirmPage() {
                   </div>
                 )}
 
-                <p className="text-xs text-[#8a8a8a]">
+                <p className="text-sm text-[#8a8a8a]">
                   Ao continuar, concorda com os termos da reserva e autoriza a cobrança do valor
                   total. Os detalhes completos serão enviados para o seu email.
                 </p>
 
-                <div className="mt-4 flex justify-between gap-3">
+                <div className="mt-4 flex justify-end gap-3">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={goBack}
                     disabled={isProcessing}
+                    className="rounded-lg"
+
                   >
                     Voltar
                   </Button>
                   <Button
                     type="button"
                     size="sm"
-                    className="bg-[#FF585D] text-white hover:bg-[#ff6f72]"
+                    className="rounded-lg bg-[#FF585D] text-white hover:bg-[#ff6f72]"
                     onClick={handleConfirmPayment}
                     disabled={!isPaymentFormValid || isProcessing}
                   >
@@ -513,7 +403,7 @@ export default function ConfirmPage() {
             </Card>
           )}
 
-          {step === 4 && (
+          {step === 3 && (
             <Card className="border-[#16a34a33] bg-[#f0fdf4]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base text-[#166534]">
@@ -521,41 +411,40 @@ export default function ConfirmPage() {
                   Pagamento confirmado
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-sm text-[#166534]">
+              <CardContent className="space-y-4 text-base text-[#166534]">
                 <p>
                   Recebemos o seu pagamento com sucesso. Enviámos um resumo da reserva e os dados
-                  do contacto do anunciante para o seu email{" "}
-                  <span className="font-semibold">{customerEmail || "informado"}</span>.
+                  do contacto do anunciante para o seu email.
                 </p>
 
                 {listing && (
                   <div className="rounded-2xl bg-white/80 p-3 text-xs text-[#166534]">
-                    <p className="font-semibold">{listing.title}</p>
-                    <p className="text-[11px] text-[#15803d]">{listing.location}</p>
-                    <p className="mt-1 text-[11px]">
+                    <p className="text-base font-semibold">{listing.title}</p>
+                    <p className="text-sm text-[#15803d]">{listing.location}</p>
+                    <p className="mt-1 text-sm">
                       Total pago:{" "}
                       <span className="font-semibold">{formattedTotal}</span>
                     </p>
                     {(checkIn || checkOut) && (
-                      <p className="text-[11px]">
+                      <p className="text-sm">
                         Datas: {checkIn ?? "..."} → {checkOut ?? "..."}
                       </p>
                     )}
                   </div>
                 )}
 
-                <p className="text-xs text-[#15803d]">
+                <p className="text-sm text-[#15803d]">
                   Guarde este comprovativo. Em caso de dúvida ou necessidade de alteração da
                   reserva, utilize o contacto partilhado no email de confirmação.
                 </p>
 
-                <div className="mt-4 flex flex-wrap gap-3">
+                <div className="mt-4 flex justify-end gap-3">
                   {listing && (
                     <Button
                       type="button"
                       size="sm"
                       variant="outline"
-                      className="border-[#16a34a66] text-[#166534]"
+                      className="rounded-lg border-[#16a34a66] text-[#166534]"
                       onClick={() => router.push(`/produto/${listing.id}`)}
                     >
                       Ver imóvel novamente
@@ -564,7 +453,7 @@ export default function ConfirmPage() {
                   <Button
                     type="button"
                     size="sm"
-                    className="bg-[#166534] text-white hover:bg-[#15803d]"
+                    className="rounded-lg bg-[#166534] text-white hover:bg-[#15803d]"
                     onClick={resetAndGoHome}
                   >
                     Voltar ao início
@@ -579,15 +468,15 @@ export default function ConfirmPage() {
         <aside className="space-y-3">
           <Card className="sticky top-20 hidden md:block">
             <CardHeader>
-              <CardTitle className="text-sm text-[#484848]">
+              <CardTitle className="text-base text-[#484848]">
                 Resumo da reserva
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-xs text-[#484848]">
+            <CardContent className="space-y-3 text-sm text-[#484848]">
               {listing ? (
                 <>
                   <div className="flex gap-3">
-                    <div className="h-16 w-16 overflow-hidden rounded-xl">
+                    <div className="h-18 w-18 overflow-hidden rounded-xl">
                       <img
                         src={listing.images[0]}
                         alt={listing.title}
@@ -595,20 +484,20 @@ export default function ConfirmPage() {
                       />
                     </div>
                     <div className="flex-1">
-                      <p className="line-clamp-2 text-xs font-semibold">
+                      <p className="line-clamp-2 text-base font-semibold">
                         {listing.title}
                       </p>
-                      <p className="text-[11px] text-[#8a8a8a]">
+                      <p className="text-sm text-[#8a8a8a]">
                         {listing.location}
                       </p>
-                      <p className="mt-1 text-[11px] text-[#8a8a8a]">
+                      <p className="mt-1 text-sm text-[#8a8a8a]">
                         {formattedPricePerNight} / dia
                       </p>
                     </div>
                   </div>
 
                   <div className="space-y-1 rounded-2xl bg-neutral-50 p-3">
-                    <div className="flex items-center justify-between text-[11px]">
+                    <div className="flex items-center justify-between text-sm">
                       <span className="text-[#8a8a8a]">Total estimado</span>
                       <span className="font-semibold text-[#484848]">
                         {formattedTotal}
@@ -622,13 +511,13 @@ export default function ConfirmPage() {
                   </div>
                 </>
               ) : (
-                <p className="text-xs text-[#8a8a8a]">
+                <p className="text-sm text-[#8a8a8a]">
                   Os detalhes do imóvel serão exibidos aqui assim que a reserva for iniciada a
                   partir de um anúncio válido.
                 </p>
               )}
 
-              <div className="mt-2 space-y-1 text-[11px] text-[#8a8a8a]">
+              <div className="mt-2 space-y-1 text-[13px] leading-4 text-justify text-[#8a8a8a]">
                 <p className="font-semibold text-[#484848]">Boas práticas</p>
                 <p>
                   Confirme sempre os dados antes de pagar. Não partilhe códigos de confirmação ou
@@ -660,7 +549,7 @@ function StepItem({ label, number, current }: StepItemProps) {
   return (
     <div className="flex items-center gap-2">
       <div
-        className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold ${
+        className={`flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${
           isCompleted
             ? "bg-[#FF585D] text-white"
             : isActive
@@ -671,7 +560,7 @@ function StepItem({ label, number, current }: StepItemProps) {
         {number}
       </div>
       <span
-        className={`hidden text-[11px] font-medium md:inline ${
+        className={`hidden text-sm font-medium md:inline ${
           isActive || isCompleted ? "text-[#484848]" : "text-[#8a8a8a]"
         }`}
       >

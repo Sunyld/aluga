@@ -95,4 +95,3 @@ export function Header({ onSearch }: HeaderProps) {
     </header>
   );
 }
-
