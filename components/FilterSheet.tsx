@@ -8,6 +8,7 @@ import {
   DrawerTitle,
 } from "./ui/drawer";
 import { X } from "lucide-react";
+import { useToast } from "./ui/toast";
 import { Filters } from "../types";
 import { cn } from "../lib/utils";
 
@@ -44,6 +45,7 @@ export function FilterSheet({
   currentFilters,
   onApply,
 }: FilterSheetProps) {
+  const toast = useToast();
   const [types, setTypes] = useState<string[]>([]);
   const [finalidades, setFinalidades] = useState<("aluguer" | "venda")[]>([]);
   const [minPrice, setMinPrice] = useState<string>("");
@@ -101,6 +103,7 @@ export function FilterSheet({
     };
     onApply(updated);
     onOpenChange(false);
+    toast.info("Filtros aplicados");
   };
 
   const handleClear = () => {
@@ -119,6 +122,7 @@ export function FilterSheet({
       maxPrice: undefined,
     });
     onOpenChange(false);
+    toast.info("Filtros removidos");
   };
 
   const TIPOS =

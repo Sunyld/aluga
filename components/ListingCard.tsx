@@ -312,14 +312,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <h3 className="font-semibold text-[#484848] line-clamp-1">
             {data.title}
           </h3>
-          <p className="text-xs text-[#484848]/70">{data.location}</p>
+          <div className="flex items-center gap-1.5 text-xs text-[#484848]/70 flex-wrap">
+            <span>{data.location}</span>
+            <Star size={12} className="fill-amber-400/80 text-amber-500/80 shrink-0" />
+            <span className="text-[#484848]/80">{data.rating}</span>
+          </div>
           <p className="text-sm text-[#484848]/60 line-clamp-1 overflow-hidden">
             {data.description}
           </p>
-          <div className="flex items-center gap-1 mt-1">
-            <Star size={14} className="fill-[#484848] text-[#484848]" />
-            <span className="text-sm text-[#484848]">{data.rating}</span>
-          </div>
           <p className="font-semibold text-base text-[#FF585D] mt-1">
             {formatPrice(data.price, data.finalidade)}
           </p>

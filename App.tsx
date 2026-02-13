@@ -1,28 +1,30 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "./components/Navbar";
 import CategoryBar, { type CategoryId } from "./components/CategoryBar";
 import ListingCard, { ActiveCardProvider } from "./components/ListingCard";
-import ListingModal from "./components/ListingModal";
 import { FilterSheet } from "./components/FilterSheet";
 import { LISTINGS } from "./constants";
 import { Category, Filters, Listing } from "./types";
 import { BottomNavbar } from "./components/mobile/BottomNavbar";
 import { UserProfile } from "./components/mobile/UserProfile";
+import { LoaderOverlay } from "./components/ui/loader";
 
 type MobileTab = "home" | "filter" | "profile";
 
 const App: React.FC = () => {
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<CategoryId>("all");
   const [filteredListings, setFilteredListings] = useState<Listing[]>(LISTINGS);
-  const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<MobileTab>("home");
   const [filters, setFilters] = useState<Filters>({ category: "all" });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -116,11 +118,11 @@ const App: React.FC = () => {
         isScrolled={isScrolled}
         onSearchStart={() => setIsLoading(true)}
         onSearchEnd={() => setIsLoading(false)}
-        onProfileClick={() => setActiveTab("profile")}
         onLogoClick={() => setActiveTab("home")}
       />
 
       <main className="flex-1 pb-28 md:pb-4 relative">
+        {isLoading && <LoaderOverlay message="A pesquisar..." />}
         {activeTab !== "profile" ? (
           <>
             <CategoryBar
@@ -173,7 +175,7 @@ const App: React.FC = () => {
                       data={listing}
                       isWishlisted={wishlist.includes(listing.id)}
                       onToggleWishlist={(e) => toggleWishlist(e, listing.id)}
-                      onClick={() => setSelectedListing(listing)}
+                      onClick={() => {}}
                     />
                   ))}
                 </div>
@@ -187,13 +189,6 @@ const App: React.FC = () => {
           </div>
         )}
       </main>
-
-      {selectedListing && (
-        <ListingModal
-          listing={selectedListing}
-          onClose={() => setSelectedListing(null)}
-        />
-      )}
 
       <FilterSheet
         open={isFilterOpen}
@@ -217,8 +212,12 @@ const App: React.FC = () => {
             openFilter();
             return;
           }
+          if (tab === "profile") {
+            router.push("/perfil");
+            return;
+          }
           setActiveTab(tab);
-          if (tab !== "filter") closeFilter();
+          closeFilter();
         }}
       />
     </div>

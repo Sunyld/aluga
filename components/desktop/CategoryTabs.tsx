@@ -6,7 +6,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import { Slider } from "../ui/slider";
-import type { MainCategoryId } from "../../app/page";
+import type { Category } from "../../types";
 
 interface FilterState {
   precoMin?: number;
@@ -14,8 +14,8 @@ interface FilterState {
 }
 
 interface CategoryTabsProps {
-  value: MainCategoryId;
-  onChange: (value: MainCategoryId) => void;
+  value: Category;
+  onChange: (value: Category) => void;
   filter: FilterState;
   onFilterChange: (value: FilterState) => void;
 }
@@ -39,7 +39,7 @@ export function CategoryTabs({
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 md:px-6 lg:px-8">
         <Tabs
           value={value}
-          onValueChange={(val) => onChange(val as MainCategoryId)}
+          onValueChange={(val) => onChange(val as Category)}
           className="flex-1"
         >
           <TabsList className="no-scrollbar flex w-full justify-start gap-1 overflow-x-auto bg-transparent p-0">

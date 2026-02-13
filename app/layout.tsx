@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Providers } from "../components/Providers";
 
 export const metadata: Metadata = {
   title: "Aluga+ · Imóveis, Logística e Eventos em Moçambique",
@@ -12,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt">
-      <body className="min-h-screen bg-neutral-50 text-neutral-900">
-        {children}
+    <html lang="pt" suppressHydrationWarning>
+      <body className="min-h-screen bg-neutral-50 text-neutral-900" suppressHydrationWarning>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

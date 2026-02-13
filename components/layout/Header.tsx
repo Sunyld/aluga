@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { Bell, UserCircle2 } from "lucide-react";
 import { SearchBar } from "../ui/search-bar";
-import { Badge } from "../ui/badge";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -28,13 +28,15 @@ export function Header({ onSearch }: HeaderProps) {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <div className="flex items-center gap-2">
-                <Badge variant="subtle" className="rounded-full">
-                  <span className="font-semibold tracking-wide">Aluga</span>
-                </Badge>
-                <span className="text-xl font-extrabold text-neutral-900">
-                  +
-                </span>
+              <div className="flex items-center">
+                <Image
+                  src="/logo.png"
+                  alt="Aluga+"
+                  width={32}
+                  height={32}
+                  className="h-8 w-auto object-contain"
+                  style={{ width: "auto" }}
+                />
               </div>
             </NavigationMenuItem>
 
